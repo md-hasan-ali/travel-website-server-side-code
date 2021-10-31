@@ -20,9 +20,19 @@ async function run() {
         const serviceCollection = database.collection('services')
         const orderServices = database.collection('Orders')
 
-        //get method
+        //get method for service collection
         app.get('/services', async (req, res) => {
             const result = await serviceCollection.find({}).toArray();
+            res.send(result)
+        })
+        //get method for all orders
+        app.get('/orders', async (req, res) => {
+            const result = await orderServices.find({}).toArray();
+            res.send(result)
+        })
+        // get my orders
+        app.get('/myOrders/:id', async (req, res) => {
+            const result = await orderServices.find({ email: req.params.id }).toArray();
             res.send(result)
         })
 
@@ -32,12 +42,20 @@ async function run() {
             const result = await serviceCollection.insertOne(query);
             res.send(result)
         })
+        //add order
+        app.post('/addOrder', async (req, res) => {
+            const query = req.body;
+            const result = await orderServices.insertOne(query);
+            res.send(result.acknowledged)
+        })
         // delete method
-        app.delete('/deleteService/:id', async (req, res) => {
+
+        app.delete('/deleteOrder/:id', async (req, res) => {
             const id = req.params.id;
+            console.log(id)
             const query = { _id: ObjectId(id) }
-            const result = await serviceCollection.deleteOne(query);
-            res.send(result)
+            const result = await orderServices.deleteOne(query);
+            console.log(result)
         })
 
     } finally {
