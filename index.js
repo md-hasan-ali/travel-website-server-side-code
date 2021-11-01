@@ -20,6 +20,21 @@ async function run() {
         const serviceCollection = database.collection('services')
         const orderServices = database.collection('Orders')
 
+        // delete api 
+        app.delete('/delete/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await orderServices.deleteOne(query)
+            console.log(result)
+        })
+
+        app.delete('/deleteMyorder/:id', async (req, res) => {
+            const id = req.params.id;
+            const quer = { _id: ObjectId(id) }
+            const deleteUser = await orderServices.deleteOne(quer);
+            console.log(deleteUser)
+        })
+
         //get method for service collection
         app.get('/services', async (req, res) => {
             const result = await serviceCollection.find({}).toArray();
@@ -50,12 +65,14 @@ async function run() {
         })
         // delete method
 
-        app.delete('/deleteOrder/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) }
-            const result = await orderServices.deleteOne(query);
-            res.send(result)
-        })
+        // app.delete('/deleteOrder/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     console.log(id)
+        //     const query = { _id: ObjectId(id) }
+        //     const result = await orderServices.deleteOne(query);
+        //     res.send(result)
+        //     console.log(result)
+        // })
 
     } finally {
         // await client.close();
